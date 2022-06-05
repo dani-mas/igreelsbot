@@ -32,7 +32,7 @@ puppeteer.use(StealthPlugin());
   await page.setDefaultNavigationTimeout(0);
 
   await page.goto("https://accounts.google.com/"); //mentioned site is then reached
-  await page.waitForTimeout(1000); // delay for 5 second for website to load]
+  await page.waitForTimeout(3000); // delay for 5 second for website to load]
   await page.type("#identifierId", email, { delay: 20 });
 
   //mouse keyboard emulation
@@ -43,18 +43,32 @@ puppeteer.use(StealthPlugin());
   // await page.mouse.click(1104,645);
 
   await page.click("#identifierNext > div > button");
-  await page.waitForTimeout(1500); // delay for 5 second for website to load]
 
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(5000);
   debugger;
 
   await page.type("#password > div > div > div > input", password, {
-    delay: 20,
+    delay: 40,
   });
   await page.click("#passwordNext > div > button");
 
   debugger;
-  // await browser.close();
+
+  await page.waitForTimeout(1000);
 
   console.log("test passed => 'google_signup'");
+
+  await page.reload({ waitUntil: "networkidle2" });
+
+  await page.setCacheEnabled(false);
+  await page.reload({ waitUntil: "networkidle2" });
+
+  await page.evaluate(() => localStorage.setItem("foo", "bar"));
+  await page.evaluate(() => localStorage.clear());
+
+  await page.goto(
+    "chrome-extension://bcocdbombenodlegijagbhdjbifpiijp/inssist.html#instagram.com/"
+  );
+
+  await page.waitForTimeout(10000);
 })();
