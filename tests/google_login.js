@@ -28,47 +28,31 @@ puppeteer.use(StealthPlugin());
   //   deviceScaleFactor: 1,
   // });
 
-  // Configure the navigation timeout
-  await page.setDefaultNavigationTimeout(0);
-
-  await page.goto("https://accounts.google.com/"); //mentioned site is then reached
-  await page.waitForTimeout(3000); // delay for 5 second for website to load]
-  await page.type("#identifierId", email, { delay: 20 });
-
-  //mouse keyboard emulation
-  // await page.mouse.click(853,449);
-  // await page.waitForTimeout(1605);
-  // await page.keyboard.type(email,{delay:60});
-  // await page.waitForTimeout(905);
-  // await page.mouse.click(1104,645);
-
-  await page.click("#identifierNext > div > button");
-
-  await page.waitForTimeout(5000);
-  debugger;
-
-  await page.type("#password > div > div > div > input", password, {
-    delay: 40,
-  });
-  await page.click("#passwordNext > div > button");
-
-  debugger;
-
+  await page.goto("https://www.instagram.com/"); //mentioned site is then reached
   await page.waitForTimeout(1000);
+  await page.click(".aOOlW");
+  await page.waitForTimeout(1000);
+  await page.type('input[name="username"]', email),
+    {
+      delay: 20,
+    };
+  await page.waitForTimeout(1000);
+  await page.type('input[name="password"]', password),
+    {
+      delay: 20,
+    };
+  await page.click('button[type="submit"]');
 
-  console.log("test passed => 'google_signup'");
+  await page.waitForNavigation();
+  await page.waitForTimeout(1000);
+  await page.goto("https://www.instagram.com/airsoundband/reels/"); //mentioned site is then reached
 
-  await page.reload({ waitUntil: "networkidle2" });
-
-  await page.setCacheEnabled(false);
-  await page.reload({ waitUntil: "networkidle2" });
-
-  await page.evaluate(() => localStorage.setItem("foo", "bar"));
-  await page.evaluate(() => localStorage.clear());
-
-  await page.goto(
-    "chrome-extension://bcocdbombenodlegijagbhdjbifpiijp/inssist.html#instagram.com/"
-  );
-
-  await page.waitForTimeout(10000);
+  // Targeting the DOM Nodes that contain the Digimon names
+  const visitas = await page.$$eval("._abbi > svg > path", function (visitas) {
+    // Mapping each Digimon name to an array
+    return visitas.map(function (visita) {
+      return visita.innerText;
+    });
+  });
+  console.log(visitas);
 })();
